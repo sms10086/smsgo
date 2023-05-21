@@ -91,3 +91,7 @@ func (me*CmppSubmit) Write(w *protocol.DataWriter) {
 	w.WriteBytes(me.Msg_Content)
 	w.WriteFixedBytes(me.Reserve, 8)
 }
+
+func (me*CmppSubmit) AddDestTerminalId(mobile string) {
+	me.Dest_Terminal_Id = append(me.Dest_Terminal_Id, mobile)
+}

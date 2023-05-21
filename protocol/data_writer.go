@@ -52,11 +52,22 @@ func (me*DataWriter) WriteFixedBytes(buf[]byte, n int) {
 	}
 }
 
-func (me*DataWriter) Flush() (int, error) {
+func (me*DataWriter) Write(p PacketWriter) error {
+	p.Write(me)
+	_, err := me.Send()
+	return err
+}
+
+func (me*DataWriter) Send() (int, error) {
 	d := me.buf.Bytes()
 	binary.BigEndian.PutUint32(d, uint32(len(d)))
 	n, err := me.w.Write(d)
 	me.buf.Reset()
-	me.buf.Write( make([]byte, 4) )
 	return n, err
+}
+
+func NewDataWriter(writer io.Writer) *DataWriter {
+	w := new(DataWriter)
+	w.w = writer
+	return w
 }

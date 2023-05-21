@@ -77,3 +77,14 @@ func (me*DataReader) ReadUint64() uint64 {
 func (me*DataReader) Error() error {
 	return me.err
 }
+
+func (me*DataReader) Read(p PacketReader) error {
+	p.Read(me)
+	return me.err
+}
+
+func NewDataReader(r io.Reader) *DataReader {
+	reader := new(DataReader)
+	reader.r = r
+	return reader
+}

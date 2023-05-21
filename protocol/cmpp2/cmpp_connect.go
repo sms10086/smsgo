@@ -6,6 +6,9 @@ package cmpp2
 
 import (
 	"smsgo/protocol"
+	"time"
+	"crypto/md5"
+	"strconv"
 )
 
 var _ protocol.PacketWriter = (*CmppConnect)(nil)
@@ -30,4 +33,26 @@ func (me*CmppConnect) Write(w *protocol.DataWriter) {
 	w.WriteBytes(me.AuthenticatorSource)
 	w.WriteUint8(me.Version)
 	w.WriteUint32(me.Timestamp)
+}
+
+func (me*CmppConnect) SetAuthentication(username, password string) {
+	
+	ts := time.Now().Format("20060102150405")[4:]
+	i, _ := strconv.ParseInt(ts, 10, 32)
+	md := md5.New()
+	md.Write([]byte(username))
+	md.Write(make([]byte, 9))
+	md.Write([]byte(password))
+	md.Write([]byte(ts))
+
+	me.Source_Addr = username
+	me.AuthenticatorSource = md.Sum(nil)
+	me.Version = 0x21
+	me.Timestamp = uint32(i)
+}
+
+func NewCmppConnect(username, password string) *CmppConnect {
+	c := new(CmppConnect)
+	c.SetAuthentication(username, password)
+	return c
 }
