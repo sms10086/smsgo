@@ -52,6 +52,15 @@ func (me*DataWriter) WriteFixedBytes(buf[]byte, n int) {
 	}
 }
 
+func (me*DataWriter) WriteCString(s string, n int) {
+	buf := []byte(s)
+	if len(buf) >= n {
+		buf = buf[0:n-1]
+	}
+	me.buf.Write(buf)
+	me.buf.WriteByte(0)
+}
+
 func (me*DataWriter) Write(p PacketWriter) error {
 	p.Write(me)
 	_, err := me.Send()

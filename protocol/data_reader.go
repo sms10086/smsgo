@@ -5,6 +5,7 @@
 package protocol
 
 import (
+	"bytes"
 	"io"
 	"encoding/binary"
 	"strings"
@@ -72,6 +73,18 @@ func (me*DataReader) ReadUint64() uint64 {
 		return 0
 	}
 	return binary.BigEndian.Uint64(buf)
+}
+
+func (me*DataReader) ReadCString(n int) string {
+	var b bytes.Buffer
+	for i:=0; i<n; i++ {
+		v := me.ReadUint8()
+		if v == 0 {
+			break
+		}
+		b.WriteByte(v)
+	}
+	return b.String()
 }
 
 func (me*DataReader) Error() error {
