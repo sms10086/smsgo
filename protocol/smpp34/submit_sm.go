@@ -30,6 +30,7 @@ type SubmitSM struct {
 	Sm_Default_Msg_Id uint8
 	Sm_Length uint8
 	Short_Message []byte
+	TLVs protocol.TLVs
 }
 
 func (me*SubmitSM) Read(r *protocol.DataReader) {
@@ -73,4 +74,5 @@ func (me*SubmitSM) Write(w *protocol.DataWriter) {
 	me.Sm_Length = uint8(len(me.Short_Message))
 	w.WriteUint8(me.Sm_Length)
 	w.WriteBytes(me.Short_Message)
+	w.WriteTLVs(me.TLVs)
 }

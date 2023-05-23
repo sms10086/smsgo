@@ -19,6 +19,11 @@ func (me*DataWriter) WriteUint8(i uint8) {
 	me.buf.WriteByte(i)
 }
 
+func (me*DataWriter) WriteUint16(i uint16) {
+	me.buf.WriteByte( uint8(i>>8) )
+	me.buf.WriteByte( uint8(i) )
+}
+
 func (me*DataWriter) WriteFixedString(s string, n int) {
 	d := []byte(s)
 	me.WriteFixedBytes(d, n)
@@ -37,6 +42,9 @@ func (me*DataWriter) WriteUint64(v uint64) {
 }
 
 func (me*DataWriter) WriteBytes(buf []byte) {
+	if len(buf) == 0 {
+		return
+	}
 	me.buf.Write(buf)
 }
 
@@ -45,7 +53,9 @@ func (me*DataWriter) WriteFixedBytes(buf[]byte, n int) {
 	if i >= n {
 		me.buf.Write(buf[0:n])
 	} else {
-		me.buf.Write(buf)
+		if i > 0 {
+			me.buf.Write(buf)
+		}
 		for ; i< n; i++ {
 			me.buf.WriteByte(0)
 		}
@@ -59,6 +69,12 @@ func (me*DataWriter) WriteCString(s string, n int) {
 	}
 	me.buf.Write(buf)
 	me.buf.WriteByte(0)
+}
+
+func (me*DataWriter) WriteTLVs(tlvs TLVs) {
+	for _, t := range tlvs {
+		t.Write(me)
+	}
 }
 
 func (me*DataWriter) Write(p PacketWriter) error {

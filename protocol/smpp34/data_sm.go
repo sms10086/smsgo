@@ -22,6 +22,7 @@ type DataSM struct {
 	Esm_Class uint8
 	Registered_Delivery uint8
 	Data_Coding uint8
+	TLVs protocol.TLVs
 }
 
 func (me*DataSM) Read(r *protocol.DataReader) {
@@ -48,4 +49,5 @@ func (me*DataSM) Write(w *protocol.DataWriter) {
 	w.WriteUint8(me.Esm_Class)
 	w.WriteUint8(me.Registered_Delivery)
 	w.WriteUint8(me.Data_Coding)
+	w.WriteTLVs(me.TLVs)
 }

@@ -47,12 +47,12 @@ func (me*CmppConnect) SetAuthentication(username, password string) {
 
 	me.Source_Addr = username
 	me.AuthenticatorSource = md.Sum(nil)
-	me.Version = 0x21
 	me.Timestamp = uint32(i)
 }
 
-func NewCmppConnect(username, password string) *CmppConnect {
+func NewCmppConnect(username, password string, ver int) *CmppConnect {
 	c := new(CmppConnect)
+	c.Version = uint8(ver)
 	c.SetAuthentication(username, password)
 	return c
 }

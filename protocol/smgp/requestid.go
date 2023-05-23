@@ -1,0 +1,22 @@
+// Copyright 2023 sms10086@hotmail.com. All rights reserved.
+// Use of this source code is governed by a AGPL-style
+// license that can be found in the LICENSE file.
+
+package smgp
+
+const (
+	LOGIN = 0x00000001
+	LOGIN_RESP = 0x80000001
+	SUBMIT = 0x00000002
+	SUBMIT_RESP = 0x80000002
+	DELIVER = 0x00000003
+	DELIVER_RESP = 0x80000003
+	ACTIVE_TEST = 0x00000004
+	ACTIVE_TEST_RESP = 0x80000004
+	FORWARD = 0x00000005
+	FORWARD_RESP = 0x80000005
+	EXIT = 0x00000006
+	EXIT_RESP = 0x80000006
+	QUERY = 0x00000007
+	QUERY_RESP = 0x80000007
+)
