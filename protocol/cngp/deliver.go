@@ -2,7 +2,7 @@
 // Use of this source code is governed by a AGPL-style
 // license that can be found in the LICENSE file.
 
-package smgp
+package cngp
 
 import (
 	"smsgo/protocol"
@@ -20,7 +20,6 @@ type Deliver struct {
 	DestTermID string
 	MsgLength uint8
 	MsgContent []byte
-	Reserve []byte
 	TLVs protocol.TLVs
 }
 
@@ -33,7 +32,6 @@ func (me*Deliver) Read(r *protocol.DataReader) {
 	me.DestTermID = r.ReadFixedString(21)
 	me.MsgLength = r.ReadUint8()
 	me.MsgContent = r.ReadBytes(int(me.MsgLength))
-	me.Reserve = r.ReadBytes(8)
 }
 
 func (me*Deliver) Write(w *protocol.DataWriter) {
@@ -46,6 +44,5 @@ func (me*Deliver) Write(w *protocol.DataWriter) {
 	me.MsgLength = uint8(len(me.MsgContent))
 	w.WriteUint8(me.MsgLength)
 	w.WriteBytes(me.MsgContent)
-	w.WriteFixedBytes(me.Reserve, 8)
 	w.WriteTLVs(me.TLVs)
 }
