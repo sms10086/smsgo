@@ -85,6 +85,19 @@ func (me*DataReader) ReadUint32() uint32 {
 	return binary.BigEndian.Uint32(buf)
 }
 
+func (me*DataReader) ReadUint32LE() uint32 {
+	if me.err != nil {
+		return 0
+	}
+	var buf = make([]byte, 4)
+	_, me.err = me.r.Read(buf)
+	if me.err != nil {
+		return 0
+	}
+	me.off = me.off + 4
+	return binary.LittleEndian.Uint32(buf)
+}
+
 func (me*DataReader) ReadUint64() uint64 {
 	if me.err != nil {
 		return 0

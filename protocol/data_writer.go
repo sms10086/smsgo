@@ -29,9 +29,23 @@ func (me*DataWriter) WriteFixedString(s string, n int) {
 	me.WriteFixedBytes(d, n)
 }
 
+func (me*DataWriter) WriteFixedCString(s string, n int) {
+	d := []byte(s)
+	if len(d) > n-1 {
+		d = d[0:n-1]
+	}
+	me.WriteFixedBytes(d, n)
+}
+
 func (me*DataWriter) WriteUint32(v uint32) {
 	d := make([]byte, 4)
 	binary.BigEndian.PutUint32(d, v)
+	me.buf.Write(d)
+}
+
+func (me*DataWriter) WriteUint32LE(v uint32) {
+	d := make([]byte, 4)
+	binary.LittleEndian.PutUint32(d, v)
 	me.buf.Write(d)
 }
 
